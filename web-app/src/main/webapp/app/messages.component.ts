@@ -16,10 +16,10 @@ class MyOptions extends BaseRequestOptions {
 })
 export class MessagesComponent implements OnInit {
     private token = 'ya29.OwK_gZu6kwBy5Q_N5GkTZvVC1aNJinY4mNl9i3P2joKaXt5UqdFbXusCu0wW1CExbzlEX1U';
-    public currentMessages = [];
-    public contacts = [];
-    public info=[];
-    public idCurrentContact;
+     public currentMessages = [];
+     public contacts = [];
+     public info=[];
+     public idCurrentContact;
     constructor(private router:Router,private routeParams:RouteParams,http: Http, element: ElementRef) {
         this.http = http;
         this.element = element.nativeElement;        
@@ -36,7 +36,7 @@ export class MessagesComponent implements OnInit {
             });
     }
     public ngOnChanges() {
-     console.log("data thay doi");
+     	console.log("data thay doi");
     }
     showMessages(dataInput){
     	this.currentMessages = dataInput.messages;
@@ -63,30 +63,33 @@ export class MessagesComponent implements OnInit {
     		this.idCurrentContact = contact.from.id;
     	else
     		this.idCurrentContact = contact.to.id;
-    	this.http.get('http://queatz-snappy.appspot.com/api/people/'+ this.idCurrentContact +'/messages?auth=' + this.token)
-            .map((res: Response) => res.json())
-            .subscribe(dataInput => {
-               if(dataInput.error){
-               		this.currentMessages = [];
-               }else{
-               		this.currentMessages = dataInput.messages;
-               }
-            });
-        console.log('Test');
-     	console.log(this.currentMessages);
+    		this.http.get('http://queatz-snappy.appspot.com/api/people/'+ this.idCurrentContact +'/messages?auth=' + this.token)
+	            .map((res: Response) => res.json())
+	            .subscribe(dataInput => {            	
+	               if(dataInput.error){
+	               		this.currentMessages = [];
+	               }else{
+	               		this.currentMessages =dataInput.reverse();               		
+	               }
+	            });
     }
     sendMessages(message){
-    	var creds = "auth=" + this.token+ "&message=" + message;
-		var headers = new Headers();
-		headers.append('Content-Type', 'application/x-www-form-urlencoded');
-		this.http.post('http://queatz-snappy.appspot.com/api/people/'+this.idCurrentContact, creds, {
-		    headers: headers
-		    })
-		    .map(res => res.json())
-		    .subscribe(dataInput => {
-               if(dataInput.message == message){
-               		this.currentMessages.push(dataInput);
-               	}
-            });
+    	if(this.idCurrentContact && typeof message !== 'undefined' && message != ""){
+	    	var creds = "auth=" + this.token+ "&message=" + message;
+			var headers = new Headers();
+			headers.append('Content-Type', 'application/x-www-form-urlencoded');		
+			
+			this.http.post('http://queatz-snappy.appspot.com/api/people/'+this.idCurrentContact, creds, {
+			    headers: headers
+			    })
+			    .map(res => res.json())
+			    .subscribe(dataInput => {
+	               if(dataInput.message == message){
+	               		this.currentMessages.push(dataInput);
+	               	}
+	            });
+       }else{
+       		console.log("empty input or idcontact");
+       }
     }
 }

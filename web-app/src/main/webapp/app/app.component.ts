@@ -4,9 +4,6 @@ import { MainComponent } from './main.component';
 import { ProfileComponent } from './profile.component';
 import { SigninComponent} from "./signin.component";
 import { MessagesComponent} from "./messages.component";
-import {enableProdMode} from "angular2/core";
-
-enableProdMode();
 
 @Component({
 	selector: 'app',
