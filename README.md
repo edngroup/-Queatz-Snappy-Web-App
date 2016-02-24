@@ -1,2 +1,2 @@
-# -Queatz-Snappy-Web-App
-Village provides a public API.[Queatz]
+# Snappy-Web-App
+Web interface for Snappy
